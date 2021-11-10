@@ -23,6 +23,8 @@ graphs:
            source: "/path/to/time_offset-GPS_NMEA.rrd"
            source_ds: value
            source_cf: AVERAGE
+           units: "%Ssec"
+
   - prefix: smart_test
     title: "SMART Temperatures"
     lines:
@@ -32,9 +34,11 @@ graphs:
         source: "/path/to/smartstats.rrd"
         source_ds: sda
         source_cf: AVERAGE
+        units: "°C"
       - legend: sdb
         type: line2
         color: "#0000ff"
         source: "/path/to/smartstats.rrd"
         source_ds: sdb
         source_cf: AVERAGE
+        units: "°C"

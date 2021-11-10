@@ -17,6 +17,7 @@ rrdtool arguments. They mostly work the same.
 
 ## Bugs/TODO
 
-- Min/Max/Average/Last in the legend.
+- Completely intolerant of missing fields... it should guess.
 - Color semi-randomization
 - Multi-axis graphs
+- The "units" field must be the same length or things will get screwy.
