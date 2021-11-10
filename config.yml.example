@@ -1,0 +1,40 @@
+global:
+  width: 1440
+  height: 300
+  outdir: "/tmp"
+
+times:
+  - name: 1h
+    title: "Last Hour"
+    end: now
+    start: now-3600
+  - name: 24h
+    title: "Last 24 Hours"
+    end: now
+    start: now-86400
+
+graphs:
+   - prefix: ntp_test
+     title: "NTP Offset"
+     lines:
+       - offset:
+           type: line2
+           color: "#0000ff"
+           source: "/path/to/time_offset-GPS_NMEA.rrd"
+           source_ds: value
+           source_cf: AVERAGE
+  - prefix: smart_test
+    title: "SMART Temperatures"
+    lines:
+      - legend: sda
+        type: line2
+        color: "#ff00ff"
+        source: "/path/to/smartstats.rrd"
+        source_ds: sda
+        source_cf: AVERAGE
+      - legend: sdb
+        type: line2
+        color: "#0000ff"
+        source: "/path/to/smartstats.rrd"
+        source_ds: sdb
+        source_cf: AVERAGE
