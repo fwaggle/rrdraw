@@ -20,4 +20,5 @@ rrdtool arguments. They mostly work the same.
 - Completely intolerant of missing fields... it should guess.
 - Color semi-randomization
 - Multi-axis graphs
-- The "units" field must be the same length or things will get screwy.
+- The "units" field must be the same length or things will get screwy
+  (you can prepend shorter ones with spaces for now).
