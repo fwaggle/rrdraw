@@ -2,6 +2,8 @@ import os
 import rrdtool
 import time
 
+import rrdraw.exceptions
+
 class GraphTimeScale():
 	def __init__(self, config={}):
 		self.name = '24h'
@@ -79,6 +81,9 @@ class GraphDrawer():
 			self.draw_one(graph, ts)
 
 	def draw_one(self, graph, ts):
+		if 'prefix' not in graph:
+			raise rrdraw.exceptions.InvalidPrefixGraph("There's a `graph` without a `prefix` property.")
+
 		output = os.path.join(self.outdir, graph['prefix'] + '-' + ts.name + '.png')
 		args = []
 
@@ -93,6 +98,15 @@ class GraphDrawer():
 		if 'right_axis_scale' in graph:
 			args.append('--right-axis')
 			args.append(graph['right_axis_scale'])
+
+		if 'lines' not in graph:
+			raise rrdraw.exceptions.NoLinesInGraph("You don't appear to have a `lines` entry in `graph` '%s'" % graph['prefix'])
+
+		if type(graph['lines']) is not list:
+			raise rrdraw.exceptions.NoLinesInGraph("The `lines` entry for `graph` '%s' is not an array." % graph['prefix'])
+
+		if len(graph['lines']) < 1:
+			raise rrdraw.exceptions.NoLinesInGraph("zero")
 
 		# Figure out the longest legend.
 		legend_size = 0

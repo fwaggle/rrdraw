@@ -7,7 +7,6 @@ def test_timescale_config():
 	ts = GraphTimeScale({
 		'name': '1h',
 		'title': 'Last Hour',
-		'end': 'now',
 		'start': 'now-3600',
 	})
 
