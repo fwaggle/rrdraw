@@ -196,6 +196,16 @@ class GraphDrawer():
 				line['units'],
 			))
 
+		if 'hrules' in graph:
+			if type(graph['hrules']) is list:
+				for (rule) in graph['hrules']:
+					if 'position' not in rule or 'color' not in rule:
+						continue
+					rule_legend = ''
+					if 'legend' in rule:
+						rule_legend = ':%s\\n' % rule['legend']
+					args.append('HRULE:%s%s%s' % (rule['position'], rule['color'], rule_legend))
+
 		args.append("GPRINT:%s_last:										  Ending at %%H\\:%%M on %%B %%d, %%Y\\r:strftime" % id)
 
 		rrdtool.graph(output,
