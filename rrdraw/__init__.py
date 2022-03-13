@@ -218,7 +218,7 @@ class GraphDrawer():
 					id,
 					mult,
 					line['color'],
-					line['legend'],
+					line['legend'].replace(':','\\:'),
 					padding,
 					stack,
 				))
@@ -251,7 +251,7 @@ class GraphDrawer():
 						continue
 					rule_legend = ''
 					if 'legend' in rule:
-						rule_legend = ':%s\\n' % rule['legend']
+						rule_legend = ':%s\\n' % rule['legend'].replace(':','\\:')
 					args.append('HRULE:%s%s%s' % (rule['position'], rule['color'], rule_legend))
 
 		args.append("GPRINT:%s_last:										  Ending at %%H\\:%%M on %%B %%d, %%Y\\r:strftime" % id)
