@@ -87,6 +87,11 @@ class GraphDrawer():
 		output = os.path.join(self.outdir, graph['prefix'] + '-' + ts.name + '.png')
 		args = []
 
+		field_width = 12
+
+		if 'field_width' in graph:
+			field_width = graph['field_width']
+
 		if 'left_axis' in graph:
 			args.append('--vertical-label')
 			args.append(graph['left_axis'])
@@ -110,15 +115,30 @@ class GraphDrawer():
 
 		# Figure out the longest legend.
 		legend_size = 0
+		unit_size = 0
 		for line in graph['lines']:
-			if line['legend'] and len(line['legend']) > legend_size:
-				legend_size = len(line['legend'])
+			current = 0
+			current_units = 0
+			if line['legend'] and len(line['legend']) > 0:
+				current = len(line['legend'])
+			if line['units'] and len(line['units']) > 0:
+				current_units += len(line['units'])
+				if '%' in line['units']:
+					current_units -= 1
 
-		args.append('COMMENT:%s		 ' % (' ' * legend_size))
-		args.append('COMMENT:Minimum		')
-		args.append('COMMENT:Average		')
-		args.append('COMMENT:Maximum		')
-		args.append('COMMENT:Last\\n')
+			current += current_units
+
+			if current > legend_size:
+				legend_size = current
+
+			if current_units > unit_size:
+				unit_size = current_units
+
+		args.append('COMMENT:%s  %s' % (' ' * legend_size, ' ' * unit_size))
+		args.append('COMMENT:%sMinimum%s' % (' ' * (field_width - len('Minimum')), ' ' * unit_size))
+		args.append('COMMENT:%sAverage%s' % (' ' * (field_width - len('Average')), ' ' * unit_size))
+		args.append('COMMENT:%sMaximum%s' % (' ' * (field_width - len('Maximum')), ' ' * unit_size))
+		args.append('COMMENT:%sLast\\n' % (' ' * (field_width - len('Last'))))
 
 		# Now generate the graph args for each data point.
 		last = None
@@ -203,20 +223,24 @@ class GraphDrawer():
 					stack,
 				))
 
-				args.append("GPRINT:%s_min:%%12.0lf%s" % (
+				args.append("GPRINT:%s_min:%%%d.0lf%s" % (
 					id,
+					field_width,
 					line['units'],
 				))
-				args.append("GPRINT:%s_avg:%%12.0lf%s" % (
+				args.append("GPRINT:%s_avg:%%%d.0lf%s" % (
 					id,
+					field_width,
 					line['units'],
 				))
-				args.append("GPRINT:%s_max:%%12.0lf%s" % (
+				args.append("GPRINT:%s_max:%%%d.0lf%s" % (
 					id,
+					field_width,
 					line['units'],
 				))
-				args.append("GPRINT:%s_last:%%12.0lf%s\\n" % (
+				args.append("GPRINT:%s_last:%%%d.0lf%s\\n" % (
 					id,
+					field_width,
 					line['units'],
 				))
 

@@ -22,4 +22,3 @@ rrdtool arguments. They mostly work the same.
 - Multi-axis graphs could be handled better.
 - The "units" field must be the same length or things will get screwy
   (you can prepend shorter ones with spaces for now).
-- The "units" field gets screwy if you use %S etc.
