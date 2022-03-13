@@ -137,6 +137,10 @@ class GraphDrawer():
 				line['source_ds'],
 				line['source_cf'],
 			))
+
+			if 'shift' in line:
+				args.append("SHIFT:%s:%s" % (id, line['shift']))
+
 			if 'multiply' in line:
 				args.append("CDEF:%s_fixed=%s,%s,*" % (
 					id,
@@ -171,6 +175,13 @@ class GraphDrawer():
 			mult = ''
 			if 'multiply' in line:
 				mult = '_fixed'
+
+			stack = ''
+			if 'stack' in line and line['stack']:
+				stack += ':STACK'
+
+			if 'skipscale' in line and line['skipscale']:
+				stack += ':skipscale'
 
 			if not line['legend']:
 				args.append("%s:%s%s%s%s" % (
