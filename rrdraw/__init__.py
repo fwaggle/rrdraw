@@ -111,7 +111,7 @@ class GraphDrawer():
 		# Figure out the longest legend.
 		legend_size = 0
 		for line in graph['lines']:
-			if len(line['legend']) > legend_size:
+			if line['legend'] and len(line['legend']) > legend_size:
 				legend_size = len(line['legend'])
 
 		args.append('COMMENT:%s		 ' % (' ' * legend_size))
@@ -161,8 +161,10 @@ class GraphDrawer():
 				id,
 			))
 
-
-			padding_len = legend_size - len(line['legend'])
+			if not line['legend']:
+				padding_len = 0
+			else:
+				padding_len = legend_size - len(line['legend'])
 			padding = ' ' * padding_len
 
 			# Generate the actual line.
@@ -170,31 +172,42 @@ class GraphDrawer():
 			if 'multiply' in line:
 				mult = '_fixed'
 
-			args.append("%s:%s%s%s:%s%s" % (
-				line['type'].upper(),
-				id,
-				mult,
-				line['color'],
-				line['legend'],
-				padding,
-			))
+			if not line['legend']:
+				args.append("%s:%s%s%s%s" % (
+					line['type'].upper(),
+					id,
+					mult,
+					line['color'],
+					stack,
+				))
 
-			args.append("GPRINT:%s_min:%%12.0lf%s" % (
-				id,
-				line['units'],
-			))
-			args.append("GPRINT:%s_avg:%%12.0lf%s" % (
-				id,
-				line['units'],
-			))
-			args.append("GPRINT:%s_max:%%12.0lf%s" % (
-				id,
-				line['units'],
-			))
-			args.append("GPRINT:%s_last:%%12.0lf%s\\n" % (
-				id,
-				line['units'],
-			))
+			else:
+				args.append("%s:%s%s%s:%s%s%s" % (
+					line['type'].upper(),
+					id,
+					mult,
+					line['color'],
+					line['legend'],
+					padding,
+					stack,
+				))
+
+				args.append("GPRINT:%s_min:%%12.0lf%s" % (
+					id,
+					line['units'],
+				))
+				args.append("GPRINT:%s_avg:%%12.0lf%s" % (
+					id,
+					line['units'],
+				))
+				args.append("GPRINT:%s_max:%%12.0lf%s" % (
+					id,
+					line['units'],
+				))
+				args.append("GPRINT:%s_last:%%12.0lf%s\\n" % (
+					id,
+					line['units'],
+				))
 
 		if 'hrules' in graph:
 			if type(graph['hrules']) is list:
